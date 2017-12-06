@@ -1,18 +1,41 @@
-public class DoubleLinkList<T> {
+public class DoubleLinkList<T> implements IList<T> {
   IDLink<T> head;
   IDLink<T> tail;
   IDLink<T> curr;
 
 
 public DoubleLinkList(){
-  head = new Cell (null, null, null);
-  curr = new Cell (null, null, null);
-  tail = new Cell (null, null, null);
+  head = null;
+  curr = null;
+  tail = null;
+}
+
+public void insert(int idx, T v){
+  if (idx==0){
+    IDLink<T> q = new Cell<T>(v, null, null);
+    head.setPrev(q);
+    q.setNext(head);
+    q.setPrev(null);
+    head = q;
+  }
+  else if (idx>0){
+  curr = head;
+  for (int i=0; i<idx; i++){
+    curr = curr.getNext();
+  }
+  IDLink<T> q = new Cell<T>(v, null, null);
+  IDLink<T> p = curr.getPrev();
+  q.setPrev(p);
+  q.setNext(curr);
+  curr.setPrev(q);
+  p.setNext(q);
+}
+tail = tail.getNext();
 }
 
 public void append(T v){
-  if (curr.getValue()==null) {
-    IDLink<T> first = new Cell(v, null, null);
+  if (curr ==null) {
+    IDLink<T> first = new Cell<T>(v, null, null);
     head = first;
     curr = first;
     tail = first;
@@ -20,25 +43,43 @@ public void append(T v){
   else {
     IDLink<T> q = new Cell(v, null, null);
     tail.setNext(q);
+    q.setPrev(tail);
     tail = q;
-    tail.setPrev(curr);
     curr = q;
   }
 }
 
 public void remove(){
-  if (curr.getValue()==null){
+  if (curr==null){
+  }
+  else if (curr==tail) {
+    curr = curr.getPrev();
+    tail.setPrev(null);
+    curr.setNext(null);
+    tail = curr;
+  }
+  else if (curr==head) {
+    IDLink p = curr;
+    curr = curr.getNext();
+    p.setNext(null);
+    curr.setPrev(null);
+    head = curr;
   }
   else {
+    IDLink p = curr.getNext();
     curr = curr.getPrev();
-    curr.setNext(null);
-    curr.setPrev(curr.getPrev());
-    tail = curr;
+    p.setPrev(curr);
+    curr.setNext(p);
   }
 }
 
 public void remove(int idx){
+  if (idx == 0){
+    head = head.getNext();
+  }
+  else {
   IDLink<T> q = head;
+  curr = q;
   for (int i=0; i<idx-1; i++){
     q = q.getNext();
     curr = q;
@@ -46,9 +87,26 @@ public void remove(int idx){
   IDLink<T> p = curr.getNext();
   curr.setNext(p.getNext());
   curr.setPrev(curr.getPrev());
+  }
 }
 
 public void move(int sidx, int didx){
+  if(sidx==0){
+    IDLink<T> save = head;
+    IDLink<T> afterSave = save.getNext();
+    afterSave.setPrev(null);
+    head = afterSave;
+    curr = head;
+    for (int i=sidx+1; i<didx-1; i++){
+      curr = curr.getNext();
+    }
+    IDLink<T> dindx = curr.getNext();
+    save.setPrev(dindx);
+    save.setNext(dindx.getNext());
+    dindx.setNext(save);
+    dindx.setPrev(curr);
+  }
+  else if (sidx<didx){
   IDLink<T> q = head;
   curr = q;
   for (int i=0; i<sidx-1; i++){
@@ -56,15 +114,41 @@ public void move(int sidx, int didx){
     curr = q;
   }
   IDLink<T> save = curr.getNext();
-  curr.setNext(save.getNext());
+  IDLink<T> afterSave = save.getNext();
+  curr.setNext(afterSave);
   curr.setPrev(curr.getPrev());
+  afterSave.setPrev(curr);
   for (int i=sidx; i<didx-1; i++){
     curr = curr.getNext();
   }
-  save.setNext(curr.getNext().getNext());
   IDLink<T> dindx = curr.getNext();
-  dindx.setNext(save);
+  save.setNext(dindx.getNext());
   save.setPrev(dindx);
+  dindx.setNext(save);
+  dindx.setPrev(curr);
+  }
+  else {
+    IDLink<T> p = head;
+    curr = p;
+    for (int i=0; i<sidx-1; i++){
+      p = p.getNext();
+      curr = p;
+    }
+    IDLink<T> save = curr.getNext();
+    IDLink<T> afterSave = save.getNext();
+    curr.setNext(afterSave);
+    afterSave.setPrev(curr);
+
+    IDLink<T> r = head;
+    curr = r;
+    for (int i=0; i<didx-1; i++){
+        r = r.getNext();
+        curr = r;
+    }
+    save.setNext(curr.getNext());
+    save.setPrev(curr);
+    curr.setNext(save);
+  }
 }
 
 public T fetch(){
@@ -73,8 +157,14 @@ public T fetch(){
 }
 
 public T fetch(int idx){
+  if (head==null){
+    return null;
+  }
   IDLink<T> a = head;
   for (int i=0; i<idx; i++){
+    if (a.getNext()==null){
+      return null;
+    }
     IDLink<T> b = a.getNext();
     a = b;
   }
@@ -83,10 +173,16 @@ public T fetch(int idx){
 }
 
 public void next(){
+  if (curr.getNext()==null){
+    return;
+  }
   curr = curr.getNext();
 }
 
 public void prev(){
+  if (curr.getPrev()==null){
+    return;
+  }
   curr = curr.getPrev();
 }
 
@@ -99,6 +195,12 @@ public void jumpToHead(){
 }
 
 public int size(){
+  if (head==null){
+    return 0;
+  }
+  else if (head==tail) {
+    return 1;
+  }
   IDLink<T> q = head;
   int i = 0;
   while (q.getNext() != tail){
@@ -108,21 +210,46 @@ public int size(){
   return i+2;
 }
 
-// public static void main(String[] argv){
-//   DoubleLinkList first = new DoubleLinkList();
-//   first.append(1);
-//   first.append(2);
-//   first.append(3);
-//   first.append(4);
-//   first.append(5);
-//   first.append(6);
-//   System.out.println(first.fetch(0));
-//   System.out.println(first.fetch(1));
-//   System.out.println(first.fetch(2));
-//   System.out.println(first.fetch(3));
-//   System.out.println(first.fetch(4));
-//   System.out.println(first.fetch(5));
-// }
+public static void main(String[] argv){
+  DoubleLinkList first = new DoubleLinkList();
+  first.append(1);
+  first.append(2);
+  first.append(3);
+  first.append(4);
+  first.append(5);
+  first.append(6);
+  first.append(7);
+  first.append(8);
+  first.append(9);
+  first.jumpToHead();
+  first.remove();
+  first.next();
+  first.remove();
+  first.next();
+  first.next();
+  first.remove();
+  first.next();
+  first.next();
+  first.remove();
+  first.next();
+  first.next();
+  first.remove();
+  first.next();
+  first.next();
+  first.remove();
+  first.next();
+  System.out.println(first.fetch(0));
+  System.out.println(first.fetch(1));
+  System.out.println(first.fetch(2));
+  System.out.println(first.fetch(3));
+  System.out.println(first.fetch(4));
+  System.out.println(first.fetch(5));
+  System.out.println(first.fetch(6));
+  System.out.println(first.fetch(7));
+  System.out.println(first.fetch(8));
+  System.out.println(first.fetch(9));
+  System.out.println(first.fetch(10));
+}
 
 }
 
