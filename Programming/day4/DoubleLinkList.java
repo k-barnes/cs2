@@ -34,7 +34,7 @@ tail = tail.getNext();
 }
 
 public void append(T v){
-  if (curr ==null) {
+  if (curr==null) {
     IDLink<T> first = new Cell<T>(v, null, null);
     head = first;
     curr = first;
@@ -127,7 +127,12 @@ public void move(int sidx, int didx){
   dindx.setNext(save);
   dindx.setPrev(curr);
   }
-  else {
+  else if (didx==0){
+    T save = this.fetch(sidx);
+    this.remove(sidx);
+    this.insert(didx, save);
+  }
+  else if (didx<sidx) {
     IDLink<T> p = head;
     curr = p;
     for (int i=0; i<sidx-1; i++){
@@ -221,23 +226,6 @@ public static void main(String[] argv){
   first.append(7);
   first.append(8);
   first.append(9);
-  first.jumpToHead();
-  first.remove();
-  first.next();
-  first.remove();
-  first.next();
-  first.next();
-  first.remove();
-  first.next();
-  first.next();
-  first.remove();
-  first.next();
-  first.next();
-  first.remove();
-  first.next();
-  first.next();
-  first.remove();
-  first.next();
   System.out.println(first.fetch(0));
   System.out.println(first.fetch(1));
   System.out.println(first.fetch(2));
