@@ -1,3 +1,4 @@
+//Note: this code is largely from coding together in class
 public class LinkStack<T> implements IStack<T> {
   Cell<T> top;
   int size;  //is the current size of the stack

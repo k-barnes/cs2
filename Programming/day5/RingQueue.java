@@ -1,3 +1,4 @@
+//Note: this code is largely from coding together in class
 /**
  * Queue implemented with an array
  */
