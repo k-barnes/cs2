@@ -32,11 +32,17 @@ public class DiGraphReader implements IGraphReader {
         // Open the file
         int rows=0;        // how many lines in the file
         int colons=0;
+        String line;
         BufferedReader br=new BufferedReader(new FileReader(filename));
-        while(br.readLine()!=null) {
-              rows++;
+        while((line = br.readLine())!=null) {
+          for(int c=0; c<line.length(); c++) {     //goes through characters in line and checks that there are two colons (so three arguments) before incrementing rows
+              if (line.charAt(c) == ':'){
+                colons++;
+              }
+            }
+            if (colons % 2 == 0) { rows++; }
         }
-        System.out.println(rows);
+        //System.out.println(rows);  working!
 
         graph = (IGraph<String, Double>)new Graph<String, Double>();
 
