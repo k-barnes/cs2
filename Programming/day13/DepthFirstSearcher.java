@@ -1,4 +1,4 @@
-public class DepthFirstSearcher<N,W> {
+public class DepthFirstSearcher<N,W> implements ISearcher<N,W> {
 
 
 public DepthFirstSearcher() {

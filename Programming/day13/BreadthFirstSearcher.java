@@ -1,4 +1,4 @@
-public class BreadthFirstSearcher<N,W> {
+public class BreadthFirstSearcher<N,W> implements ISearcher<N,W> {
 
 public BreadthFirstSearcher() {
 
