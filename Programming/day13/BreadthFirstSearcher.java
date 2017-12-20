@@ -20,8 +20,8 @@ public boolean pathExists(IGraph<N,W> g, INode<N> s, INode<N> e) {
   return destinationFound;
 }
 
-public boolean getPath(IGraph<N,W> g, INode<N> s, INode<N> e) {
-
+public IList<INode<N>> getPath(IGraph<N,W> g, INode<N> s, INode<N> e) {
+  DoubleLinkList<INode<N>> toReturn = new DoubleLinkList<INode<N>>();
   RingQueue<INode<N>> myQueue = new RingQueue<INode<N>>(100);
   DoubleLinkList<INode<N>> keepTrack = new DoubleLinkList<INode<N>>();
 
@@ -38,7 +38,7 @@ public boolean getPath(IGraph<N,W> g, INode<N> s, INode<N> e) {
   } catch (UnderFlowException err) {}
 
     if (curr.equals(e)) {
-      return true;
+      return toReturn;   ////true that there is a path
     }
 
     else if (g.getEdgesFrom(curr) != null) {
@@ -68,7 +68,7 @@ public boolean getPath(IGraph<N,W> g, INode<N> s, INode<N> e) {
       continue;
     }
   }
-  return false;
+  return null;   //false that there is a path
 }
 
 
