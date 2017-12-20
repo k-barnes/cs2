@@ -7,6 +7,7 @@ public BreadthFirstSearcher() {
 public boolean pathExists(IGraph<N,W> g, INode<N> s, INode<N> e) {
   boolean destinationFound = false;
   IEdge<N,W>[] theNeighbors = g.getEdgesFrom(s);
+  if (theNeighbors != null) {
   for (int i = 0; i < theNeighbors.length; i++) {
     if (theNeighbors[i].getDestination() == e) {
       destinationFound = true;
@@ -17,6 +18,7 @@ public boolean pathExists(IGraph<N,W> g, INode<N> s, INode<N> e) {
       if (destinationFound) { return true; }
     }
   }
+}
   return destinationFound;
 }
 
@@ -84,11 +86,8 @@ public static void main(String[] args) {
   INode<String> node4 = g.addNode("node4");
   INode<String> end = g.addNode("end");
   g.addEdge(start,node1,1.0);
-  g.addEdge(start,node2,1.0);
-  g.addEdge(node1,end,1.0);
-  g.addEdge(node1,node3,1.0);
-  g.addEdge(node3,node2,1.0);
-  g.addEdge(node3,node4,1.0);
+  g.addEdge(node2,end,1.0);
+
 
 
 

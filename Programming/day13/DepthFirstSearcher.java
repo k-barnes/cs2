@@ -7,6 +7,7 @@ public DepthFirstSearcher() {
 public boolean pathExists(IGraph<N,W> g, INode<N> s, INode<N> e) {
   boolean destinationFound = false;
   IEdge<N,W>[] theNeighbors = g.getEdgesFrom(s);
+  if (theNeighbors != null) {
   for (int i = 0; i < theNeighbors.length; i++) {
     if (theNeighbors[i].getDestination() == e) {
       destinationFound = true;
@@ -17,6 +18,7 @@ public boolean pathExists(IGraph<N,W> g, INode<N> s, INode<N> e) {
       if (destinationFound) { return true; }
     }
   }
+}
   return destinationFound;
 }
 
